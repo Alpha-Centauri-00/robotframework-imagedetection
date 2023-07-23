@@ -5,20 +5,21 @@ import numpy as np
 from keras.models import load_model
 import cv2
 import os
+from robot.api import logger
 
-def train_model():
+def train_model(training_path, validation_path):
     
     class_num = len(_get_subfolders("Data/training/"))
 
     train_datagen = ImageDataGenerator(rescale=1/255)
     valid_datagen = ImageDataGenerator(rescale=1/255)
 
-    train_dataset = train_datagen.flow_from_directory('Data/training/',
+    train_dataset = train_datagen.flow_from_directory(training_path,
                                                     target_size=(200, 200),
                                                     batch_size=3,
                                                     class_mode='categorical')
 
-    valid_dataset = valid_datagen.flow_from_directory('Data/validation/',
+    valid_dataset = valid_datagen.flow_from_directory(validation_path,
                                                     target_size=(200, 200),
                                                     batch_size=3,
                                                     class_mode='categorical')
@@ -76,6 +77,13 @@ def capture_and_predict(model_name):
     camera.release()
 
     _predict(model_name,save_path)
+        
+    curdir = os.getcwd()
+    current_directory_with_double_backslashes = curdir.replace("\\", "\\\\")
+
+    Log_photo = fr"<img src={current_directory_with_double_backslashes}\\{save_path} width='150' height='100'>"
+    logger.info(Log_photo,html=True,also_console=False)
+
 
 def _predict(model_name, photo):
     model = load_model(model_name)
@@ -99,5 +107,7 @@ def predict_from_path(model_name, photo_path):
     
     _predict(model_name,photo_path)
 
+    Log_photo = f'<img src="{photo_path}" width="150" height="100">'
+    logger.info(Log_photo,html=True,also_console=False)
 
 
