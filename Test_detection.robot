@@ -4,6 +4,7 @@ Library    main.py
 
 *** Variables ***
 ${model_name}    ${CURDIR}\\model.keras
+${google_model}    ${CURDIR}\\keras_model.keras
 
 ${training_path}    ${CURDIR}\\Data\\training\\
 ${validation_path}    ${CURDIR}\\Data\\validation\\
@@ -29,3 +30,6 @@ detect photo
 capture a photo 
     Capture And Predict    ${model_name}
 
+
+predicting from google model
+    Predict From Google Model    ${google_model}    ${test_phtot_2}
