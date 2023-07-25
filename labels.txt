@@ -1,3 +1,0 @@
-0 Straight
-1 Right
-2 Left
