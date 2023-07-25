@@ -8,6 +8,8 @@ import os
 from robot.api import logger
 
 
+__version__ = "0.0.1"
+
 class ImageDetection:
 
     def __init__(self):
