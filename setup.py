@@ -17,9 +17,9 @@ Take your Robot Framework tests to the next level with our image detection packa
 
 CURDIR = dirname(abspath(__file__))
 with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+    LONG_DESCRIPTION = LONG_DESCRIPTION + fh.read()
 
-with open(join(CURDIR, "imagedetection", "__init__.py"), encoding="utf-8") as f:
+with open(join(CURDIR, "ImageDetection", "Base_detection.py"), encoding="utf-8") as f:
     VERSION = re.search(r'\n__version__ = "(.*)"', f.read()).group(1)
 
 with open("requirements.txt") as f:
