@@ -1,14 +1,14 @@
-from keras.preprocessing.image import ImageDataGenerator
-from keras.preprocessing import image
-import tensorflow as tf
-import numpy as np
-from keras.models import load_model
-import cv2
 import os
+import cv2
+import numpy as np
+import tensorflow as tf
 from robot.api import logger
+from keras.models import load_model
+from keras.preprocessing import image
+from keras.preprocessing.image import ImageDataGenerator
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 class Base_Detect:
 
