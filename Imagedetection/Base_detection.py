@@ -2,7 +2,6 @@ import os
 import cv2
 import numpy as np
 import tensorflow as tf
-from robot.api import logger
 from keras.models import load_model
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
@@ -69,7 +68,7 @@ class Base_Detect:
         except FileNotFoundError as e:
             print(e)
 
-    def capture_and_predict(self,model_name):
+    def capture_and_predict(self,model_name,save_path):
         # Take a photos from a camera
 
         camera = cv2.VideoCapture(0)
@@ -80,19 +79,12 @@ class Base_Detect:
         _, frame = camera.read()
 
         # Provide the desired save path for the captured photo
-        save_path = "captured_photo2.jpg"
         cv2.imwrite(save_path, frame)
         camera.release()
 
         self._predict(model_name,save_path)
             
-        curdir = os.getcwd()
-        current_directory_with_double_backslashes = curdir.replace("\\", "\\\\")
-
-        Log_photo = fr"<img src={current_directory_with_double_backslashes}\\{save_path} width='150' height='100'>"
-        logger.info(Log_photo,html=True,also_console=False)
-
-
+        
     def _predict(self,model_name, photo_path):
         model = load_model(model_name)
         # Load the testing image
@@ -108,15 +100,7 @@ class Base_Detect:
         predicted_class = class_labels[np.argmax(prediction_probs)]
         print("Predicted class:", predicted_class)
         #print("Predicted probs:", prediction_probs)
-
-
-    def predict_from_path(self,model_name, photo_path):
-        # You need to train a model first to use this function. 
         
-        self._predict(model_name,photo_path)
-
-        Log_photo = f'<img src="{photo_path}" width="150" height="100">'
-        logger.info(Log_photo,html=True,also_console=False)
 
     def predict_from_google_model(self,_model,_image):
         from PIL import Image, ImageOps  
@@ -156,9 +140,6 @@ class Base_Detect:
         index = np.argmax(prediction)
         class_name = class_names[index]
         confidence_score = prediction[0][index]
-
-        Log_photo = f'<img src="{_image}" width="150" height="100">'
-        logger.info(Log_photo,html=True,also_console=False)
 
         # Print prediction and confidence score
         print("Class:", class_name[2:], end="")
