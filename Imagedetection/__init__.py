@@ -1,1 +1,1 @@
-from .Imagedetection import ImageDetection
+from .Imagedetection import Imagedetection
