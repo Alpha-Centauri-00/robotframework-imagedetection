@@ -4,7 +4,7 @@ from robot.api import logger
 
 ROBOT_LIBRARY_SCOPE = 'SUITE'
 
-class ImageDetection:
+class Imagedetection:
     def __init__(self):
         self.Base = Base_Detect()
 
