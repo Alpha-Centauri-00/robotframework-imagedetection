@@ -124,7 +124,6 @@ In this README, we covered the following topics:
 - How to collect and organize your dataset
 - Training a new model and generating the `model.keras` file
 - Using the trained model for image detection with `Detect From Path`
-- Exploring advanced features like fine-tuning, webcam integration, and customizing detection thresholds
 
 Our library aims to simplify image detection tasks and empower you to build robust and accurate image detection systems within the Robot Framework.
 
