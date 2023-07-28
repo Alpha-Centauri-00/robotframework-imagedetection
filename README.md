@@ -36,7 +36,7 @@ Before training the image detection model with the "RobotFramework-ImageDetectio
 
 3. **Organize Photos by Class**: Within the "training" and "validation" folders, organize your photos into subfolders based on their classes or categories. For example, if you are classifying images into "Right," "Left," and "Straight," create subfolders named "Right," "Left," and "Straight" inside both the "training" and "validation" folders.
 
-4. **Split Data**: Ensure that each class's photos are split appropriately between the "training" and "validation" folders. The "training" folder should contain a majority of the photos for each class, while the "validation" folder should have a smaller subset of images for evaluation purposes.
+4. **Split Data**: Ensure that each class's photos are distributed appropriately between the "training" and "validation" folders. The "training" folder should contain photos of each class. Similarly, the "validation" folder should also contain photos of each class, but make sure to use different images than those present in the "training" folder. This separation allows for proper evaluation and testing of the image detection model.
 
 Your data structure should look like this:
 
@@ -57,4 +57,37 @@ Following this organized structure will enable smooth data loading and training 
 ## Training and Detection
 
 Once you have organized your data as described above, you can use the library to train your image detection model and perform real-time detection within your Robot Framework automation projects.
+
+
+Now create a new Test case using Robot framework to train a new Model:
+
+```robot
+*** Settings ***
+Library   Imagedetection
+
+*** Variables ***
+${training_}    ${CURDIR}\\Data\\training
+${validati_}    ${CURDIR}\\Data\\validation
+
+*** Test Cases ***
+
+Training a New Model
+    Train Model    ${training_}    ${validati_}
+```
+
+
+In this example, the Robot Framework test case named "Training a New Model" starts by importing the "Imagedetection" library under setting section.
+
+The Variables section sets up two variables:
+
+***${training_}***: Specifies the directory path containing the training data for the model. It points to the "training" folder inside the "Data" directory.
+***${validati_}***: Specifies the directory path containing the validation data for the model. It points to the "validation" folder inside the "Data" directory.
+The actual test case named "Training a New Model" calls the "Train Model" keyword from the "Imagedetection" library. This keyword is designed to train an image detection model using the specified training and validation data directories.
+
+> Training a model can take some time, depends of course on the size of your dataset. Please be patient 🙂
+
+Once you have set up your test cases like this example, you can run your Robot Framework tests to train and utilize your image detection model effectively.
+
+after the test is finished, it will automaticlly generate a new file called `model.keras` This file will contain the trained model, which can be used for image detection in your subsequent Robot Framework test cases. This model file is crucial, as it encapsulates the learned patterns and features from the training data, allowing it to accurately detect objects or patterns in new images. Once the file is generated, you can load and utilize the trained model to perform image detection tasks with ease.
+
 
