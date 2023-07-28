@@ -7,7 +7,7 @@ from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 class Base_Detect:
 
