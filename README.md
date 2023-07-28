@@ -54,8 +54,9 @@ Your data structure should look like this:
 
 Following this organized structure will enable smooth data loading and training using the "RobotFramework-ImageDetection" library. Remember to provide a sufficient amount of diverse and representative photos for accurate model training.
 
-## Training and Detection
+## Train and Detect
 
+### Training a new model
 Once you have organized your data as described above, you can use the library to train your image detection model and perform real-time detection within your Robot Framework automation projects.
 
 
@@ -89,5 +90,46 @@ The actual test case named "Training a New Model" calls the "Train Model" keywor
 Once you have set up your test cases like this example, you can run your Robot Framework tests to train and utilize your image detection model effectively.
 
 after the test is finished, it will automaticlly generate a new file called `model.keras` This file will contain the trained model, which can be used for image detection in your subsequent Robot Framework test cases. This model file is crucial, as it encapsulates the learned patterns and features from the training data, allowing it to accurately detect objects or patterns in new images. Once the file is generated, you can load and utilize the trained model to perform image detection tasks with ease.
+
+***
+### Detecting from new model
+
+Now, the easy part is to use another keyword `Detect From Path` to make predictions using the newly trained model. This keyword takes two arguments: `model_name`, which is the path to the generated model, and `photo_path`, which indicates the path to a test photo that will be used to check if our model can detect the object or not. By providing these two arguments, you can easily evaluate the performance of your trained model on new images and test its detection capabilities.
+
+```robot
+*** Settings ***
+Library   Imagedetection
+
+*** Variables ***
+${training_}    ${CURDIR}\\Data\\training
+${validati_}    ${CURDIR}\\Data\\validation
+
+${model_name}    ${CURDIR}\\model.keras
+
+*** Test Cases ***
+
+Check the test photo
+    Detect From Path    ${model_name}    ${CURDIR}\\test\\Left_test2png.png
+```
+`${model_name}`: Specifies the path to the generated model file (model.keras) that was trained using the specified training and validation data directories.
+This test case "Check the test photo" calls the "Detect From Path" keyword to perform image detection on a single test photo using the trained model specified.
+
+## Conclusion
+
+Congratulations! You've reached the end of the README for the "RobotFramework-ImageDetection" library. We hope this documentation has provided you with a clear understanding of how to use our library for image detection in your Robot Framework projects.
+
+In this README, we covered the following topics:
+
+- Introduction to the library and its features
+- How to collect and organize your dataset
+- Training a new model and generating the `model.keras` file
+- Using the trained model for image detection with `Detect From Path`
+- Exploring advanced features like fine-tuning, webcam integration, and customizing detection thresholds
+
+Our library aims to simplify image detection tasks and empower you to build robust and accurate image detection systems within the Robot Framework.
+
+If you encounter any issues, have questions, or want to contribute to the project, feel free to visit our [GitHub repository](https://github.com/Alpha-Centauri-00/robotframework-imagedetection). We value your feedback and are excited to grow the library together with the community.
+
+Thank you for choosing "RobotFramework-ImageDetection" for your image detection needs. Happy testing and happy detecting!😄
 
 
