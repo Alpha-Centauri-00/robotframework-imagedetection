@@ -1,5 +1,5 @@
 # Robot Framework- ImageDetection
-> Disclaimer: This "RobotFramework-ImageDetection" library is currently in early development and is intended for testing and experimentation purposes only. It is not recommended for use in production environments. Please use at your own risk. Feedback and bug reports are highly appreciated as we continue to improve the library. Thank you for your understanding.⚠️
+> Disclaimer: This library is currently in early development and is intended for testing and experimentation purposes only. It is not recommended for use in production environments. Please use at your own risk. Feedback and bug reports are highly appreciated as we continue to improve the library. Thank you for your understanding.⚠️
 
 The "RobotFramework-ImageDetection" library is a powerful tool designed to harness the capabilities of machine learning to train and detect photos effectively within the Robot Framework automation framework. With its seamless integration, this library enables users to build intelligent and sophisticated automation solutions by incorporating computer vision and image recognition techniques.
 
