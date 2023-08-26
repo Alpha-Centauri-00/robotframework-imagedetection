@@ -84,7 +84,7 @@ class Base_Detect:
 
         self._predict(model_name,save_path)
             
-        
+    #@tf.function
     def _predict(self,model_name, photo_path):
         model = load_model(model_name)
         # Load the testing image
@@ -98,8 +98,11 @@ class Base_Detect:
         class_labels = self._get_subfolders("Data/training/")
         
         predicted_class = class_labels[np.argmax(prediction_probs)]
-        print("Predicted class:", predicted_class)
+        #print("Predicted class:", predicted_class)
         #print("Predicted probs:", prediction_probs)
+        return predicted_class,prediction_probs
+        #return prediction_probs
+
         
 
     def predict_from_google_model(self,_model,_image):
