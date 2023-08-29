@@ -45,10 +45,10 @@ Your data structure should look like this:
       │ ├── Right/
       │ ├── Left/
       │ └── Straight/
-      └── validation/
-      ├── Right/
-      ├── Left/
-      └── Straight/
+      ├── validation/
+      │ ├── Right/
+      │ ├── Left/
+      │ └── Straight/
 
 
 
