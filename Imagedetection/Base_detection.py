@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 import tensorflow as tf
+from datetime import datetime
 from keras.models import load_model
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
@@ -53,7 +54,7 @@ class Base_Detect:
                     validation_data=valid_dataset,
                     validation_steps=len(valid_dataset))
 
-        model.save("model.keras")
+        model.save(datetime.now().strftime(f'model_%Y%d%m%H%M.keras'))
 
 
     def _get_subfolders(self,path):
@@ -98,9 +99,9 @@ class Base_Detect:
         class_labels = self._get_subfolders("Data/training/")
         
         predicted_class = class_labels[np.argmax(prediction_probs)]
-        #print("Predicted class:", predicted_class)
-        #print("Predicted probs:", prediction_probs)
-        return predicted_class,prediction_probs
+        print("Predicted class:", predicted_class)
+        print("Predicted probs:", prediction_probs)
+        #return predicted_class,prediction_probs
         #return prediction_probs
 
         
