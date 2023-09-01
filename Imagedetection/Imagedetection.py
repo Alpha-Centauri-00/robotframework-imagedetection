@@ -9,13 +9,20 @@ class Imagedetection:
     def __init__(self):
         self.Base = Base_Detect()
         self.log_image_width = 150
-        self.log_image_height = 100
+        self.log_image_height = 150
     
         self.save_path = "captured_photo.jpg"
 
     def _show_photo_in_log(self,_path):
-        Log_photo = f'<img src="{_path}" width="{self.log_image_width}" height="{self.log_image_height}">'
-        logger.info(Log_photo,html=True,also_console=False)
+        import base64
+    
+        with open(_path, 'rb') as image:
+            image_data = image.read()
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+            # Create an HTML img tag with the base64-encoded image data
+            img_tag = f'<img src="data:image/png;base64,{image_base64}" alt="Image" width="{self.log_image_width}" height="{self.log_image_height}"/>'
+            logger.info(img_tag,html=True,also_console=False)
 
     @keyword
     def Train_Model(self,training_path,validation_path):
