@@ -19,15 +19,16 @@ CURDIR = dirname(abspath(__file__))
 with open("README.md", "r", encoding="utf-8") as fh:
     Long_desc = LONG_DESCRIPTION + fh.read()
 
-# with open(join(CURDIR, "ImageDetection", "Base_detection.py"), encoding="utf-8") as f:
-#     VERSION = re.search(r'\n__version__ = "(.*)"', f.read()).group(1)
-
+# Read requirements from requirements.txt
 with open("requirements.txt") as f:
-    _required_packages = f.read().splitlines()
+    _required_packages = f.readlines()
+
+# Remove newline characters from the end of each line
+_required_packages = [line.strip() for line in _required_packages]
 
 setup(
     name="robotframework-imagedetection",
-    version="0.0.7",
+    use_scm_version=True,  # Use setuptools-scm to determine version
     author="M.Kherki(Alpha-Centauri-00)",
     author_email="alpha_Centauri@posteo.de",
     description=DESCRIPTION,
@@ -45,4 +46,5 @@ setup(
         "Framework :: Robot Framework",
     ],
     python_requires=">=3.6",
+    setup_requires=["setuptools-scm"],  # Add setuptools-scm as a setup requirement
 )
