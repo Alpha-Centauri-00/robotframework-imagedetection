@@ -34,7 +34,7 @@ setup(
     long_description=Long_desc,
     long_description_content_type="text/markdown",
     url="https://github.com/Alpha-Centauri-00/robotframework-imagedetection",
-    packages=find_packages(),  # Automatically discover all packages
+    packages=find_packages(),
     install_requires=_required_packages,
     classifiers=[
         "Programming Language :: Python :: 3",
