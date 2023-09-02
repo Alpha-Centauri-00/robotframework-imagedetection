@@ -27,7 +27,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="robotframework-imagedetection",
-    version=VERSION,
+    version="0.0.7",
     author="M.Kherki(Alpha-Centauri-00)",
     author_email="alpha_Centauri@posteo.de",
     description=DESCRIPTION,
