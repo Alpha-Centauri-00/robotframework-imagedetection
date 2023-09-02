@@ -67,13 +67,13 @@ Now create a new Test case using Robot framework to train a new Model:
 Library   Imagedetection
 
 *** Variables ***
-${training_}    ${CURDIR}\\Data\\training
-${validati_}    ${CURDIR}\\Data\\validation
+${training_folder}      ${CURDIR}\\Data\\training
+${validation_folder}    ${CURDIR}\\Data\\validation
 
 *** Test Cases ***
 
 Training a New Model
-    Train Model    ${training_}    ${validati_}
+    Train Model    ${training_folder}    ${validation_folder}
 ```
 
 
@@ -101,10 +101,10 @@ Now, the easy part is to use another keyword `Detect From Path` to make predicti
 Library   Imagedetection
 
 *** Variables ***
-${training_}    ${CURDIR}\\Data\\training
-${validati_}    ${CURDIR}\\Data\\validation
+${training_folder}      ${CURDIR}\\Data\\training
+${validation_folder}    ${CURDIR}\\Data\\validation
 
-${model_name}    ${CURDIR}\\model.keras
+${model_name}           ${CURDIR}\\model_XXXXX.keras
 
 *** Test Cases ***
 
