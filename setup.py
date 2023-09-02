@@ -19,8 +19,8 @@ CURDIR = dirname(abspath(__file__))
 with open("README.md", "r", encoding="utf-8") as fh:
     Long_desc = LONG_DESCRIPTION + fh.read()
 
-with open(join(CURDIR, "ImageDetection", "Base_detection.py"), encoding="utf-8") as f:
-    VERSION = re.search(r'\n__version__ = "(.*)"', f.read()).group(1)
+# with open(join(CURDIR, "ImageDetection", "Base_detection.py"), encoding="utf-8") as f:
+#     VERSION = re.search(r'\n__version__ = "(.*)"', f.read()).group(1)
 
 with open("requirements.txt") as f:
     _required_packages = f.read().splitlines()
