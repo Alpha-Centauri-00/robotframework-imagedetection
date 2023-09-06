@@ -1,5 +1,4 @@
 import os
-import cv2
 import numpy as np
 import tensorflow as tf
 from datetime import datetime
@@ -69,21 +68,6 @@ class Base_Detect:
         except FileNotFoundError as e:
             print(e)
 
-    def capture_and_predict(self,model_name,save_path):
-        # Take a photos from a camera
-
-        camera = cv2.VideoCapture(0)
-        if not camera.isOpened():
-            print("Error: camera not accessible.")
-            return None
-        
-        _, frame = camera.read()
-
-        # Provide the desired save path for the captured photo
-        cv2.imwrite(save_path, frame)
-        camera.release()
-
-        self._predict(model_name,save_path)
             
     #@tf.function
     def _predict(self,model_name, photo_path):
@@ -99,9 +83,9 @@ class Base_Detect:
         class_labels = self._get_subfolders("Data/training/")
         
         predicted_class = class_labels[np.argmax(prediction_probs)]
-        print("Predicted class:", predicted_class)
-        print("Predicted probs:", prediction_probs)
-        #return predicted_class,prediction_probs
+        # print("Predicted class:", predicted_class)
+        # print("Predicted probs:", prediction_probs)
+        return predicted_class
         #return prediction_probs
 
         
@@ -148,3 +132,6 @@ class Base_Detect:
         # Print prediction and confidence score
         print("Class:", class_name[2:], end="")
         print("Confidence Score:", confidence_score)
+
+
+    
