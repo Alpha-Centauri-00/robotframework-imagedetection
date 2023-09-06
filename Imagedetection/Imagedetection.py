@@ -2,6 +2,7 @@ from .Base_detection import Base_Detect
 from robot.api.deco import keyword,library
 from robot.api import logger
 import os
+import cv2
 
 ROBOT_LIBRARY_SCOPE = 'SUITE'
 
@@ -63,9 +64,11 @@ class Imagedetection:
         Photo Class Detection: 
         When you execute the Keyword with the test photo, it will utilize the trained model to detect the class or category to which the photo belongs. The Keyword will provide the result in log.html file.
         '''
-        self.Base._predict(model_name,photo_path)
+        predict = self.Base._predict(model_name,photo_path)
         self._show_photo_in_log(_path=photo_path)
-        
+        return predict
+    
+
     @keyword
     def detect_from_webcam(self,model_name):
         '''
@@ -82,7 +85,7 @@ class Imagedetection:
         The function will utilize the trained model to predict the class or category to which the taken photo belongs. It will provide the result, indicating the detected class for the photo taken by the webcam.
         
         '''
-        self.Base.capture_and_predict(model_name,self.save_path)
+        self.capture_and_predict(model_name,self.save_path)
 
         curdir = os.getcwd()
         current_directory_with_double_backslashes = curdir.replace("\\", "\\\\")
@@ -93,3 +96,28 @@ class Imagedetection:
     def detect_from_google(self,model,photo):
         self.Base.predict_from_google_model(model,photo)
         self._show_photo_in_log(photo)
+
+    @keyword
+    def capture_and_predict(self,
+                          model_name,
+                          save_path,
+                          x = 100,
+                          y = 100,
+                          width = 200,
+                          height = 200):
+        # Capture an image from the camera
+        camera = cv2.VideoCapture(0)
+        if not camera.isOpened():
+            print("Error: camera not accessible.")
+        else:
+            _, frame = camera.read()
+            camera.release()
+
+            # Crop the ROI from the captured frame
+            roi = frame[y:y+height, x:x+width]
+            
+            cv2.imwrite(save_path, roi)
+            cv2.destroyAllWindows()
+            self._show_photo_in_log(save_path)
+            predict=  self.Base._predict(model_name,save_path)
+            return predict
