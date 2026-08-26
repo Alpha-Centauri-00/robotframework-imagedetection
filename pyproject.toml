@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "robotframework-imagedetection"
+dynamic = ["version"]
+description = "Image detection for Robot-Framework"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+authors = [
+    { name = "M.Kherki(Alpha-Centauri-00)", email = "alpha_Centauri@posteo.de" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Testing :: Acceptance",
+    "Framework :: Robot Framework",
+]
+dependencies = [
+    "numpy",
+    "opencv-python",
+    "Pillow",
+    "torch>=2.9",
+    "torchvision>=0.24",
+    "robotframework",
+]
+
+[project.urls]
+Homepage = "https://github.com/Alpha-Centauri-00/robotframework-imagedetection"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/Imagedetection"]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu130", marker = "sys_platform != 'darwin'" },
+]
+torchvision = [
+    { index = "pytorch-cu130", marker = "sys_platform != 'darwin'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true

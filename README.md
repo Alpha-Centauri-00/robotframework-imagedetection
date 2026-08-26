@@ -6,7 +6,7 @@ The "RobotFramework-ImageDetection" library is a powerful tool designed to harne
 
 ## Installation
 
-Before installing "RobotFramework-ImageDetection," please ensure you have Python 3.6 or higher installed on your system.
+Before installing "RobotFramework-ImageDetection," please ensure you have Python 3.10 or higher installed on your system.
 
 ### Using pip
 
@@ -21,6 +21,18 @@ To install the library, simply use pip:
 ```bash
 pip install robotframework-imagedetection
 ```
+
+### GPU (NVIDIA/CUDA) support
+
+Training and detection automatically run on an NVIDIA GPU if one is available, falling back to CPU otherwise — no code or keyword changes needed. This library uses PyTorch, so to get GPU acceleration you need to install a CUDA-enabled PyTorch build instead of the default CPU-only one from PyPI. Follow the selector at [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) to get the exact command for your CUDA version — with `uv`:
+
+```bash
+uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+```
+
+(or plain `pip install torch torchvision --index-url ...` if not using `uv`). Use whichever `cuXXX` tag the selector on pytorch.org recommends for your GPU/driver — newer NVIDIA GPUs (e.g. the RTX 50 series / Blackwell architecture) need CUDA 12.8 or newer (`cu128` or later); older tags like `cu121` predate that hardware and won't work on it.
+
+You can verify it worked with `uv run python -c "import torch; print(torch.cuda.is_available())"`, or by running `atest/smoke_test.robot` (see [atest/](atest/)) and checking its "Report Device Info" test case.
 
 ## Collecting Dataset / Photos
 
@@ -89,7 +101,7 @@ The actual test case named "Training a New Model" calls the "Train Model" keywor
 
 Once you have set up your test cases like this example, you can run your Robot Framework tests to train and utilize your image detection model effectively.
 
-after the test is finished, it will automaticlly generate a new file called `model.keras` This file will contain the trained model, which can be used for image detection in your subsequent Robot Framework test cases. This model file is crucial, as it encapsulates the learned patterns and features from the training data, allowing it to accurately detect objects or patterns in new images. Once the file is generated, you can load and utilize the trained model to perform image detection tasks with ease.
+after the test is finished, it will automaticlly generate a new file called `model_<timestamp>.pt` This file will contain the trained model, which can be used for image detection in your subsequent Robot Framework test cases. This model file is crucial, as it encapsulates the learned patterns and features from the training data, allowing it to accurately detect objects or patterns in new images. Once the file is generated, you can load and utilize the trained model to perform image detection tasks with ease.
 
 ***
 ### Detecting from new model
@@ -104,14 +116,14 @@ Library   Imagedetection
 ${training_folder}      ${CURDIR}\\Data\\training
 ${validation_folder}    ${CURDIR}\\Data\\validation
 
-${model_name}           ${CURDIR}\\model_XXXXX.keras
+${model_name}           ${CURDIR}\\model_XXXXX.pt
 
 *** Test Cases ***
 
 Check the test photo
     Detect From Path    ${model_name}    ${CURDIR}\\test\\Left_test2png.png
 ```
-`${model_name}`: Specifies the path to the generated model file (model.keras) that was trained using the specified training and validation data directories.
+`${model_name}`: Specifies the path to the generated model file (model_XXXXX.pt) that was trained using the specified training and validation data directories.
 This test case "Check the test photo" calls the "Detect From Path" keyword to perform image detection on a single test photo using the trained model specified.
 
 ## Conclusion
@@ -122,7 +134,7 @@ In this README, we covered the following topics:
 
 - Introduction to the library and its features
 - How to collect and organize your dataset
-- Training a new model and generating the `model.keras` file
+- Training a new model and generating the `model_<timestamp>.pt` file
 - Using the trained model for image detection with `Detect From Path`
 
 Our library aims to simplify image detection tasks and empower you to build robust and accurate image detection systems within the Robot Framework.
@@ -130,5 +142,3 @@ Our library aims to simplify image detection tasks and empower you to build robu
 If you encounter any issues, have questions, or want to contribute to the project, feel free to visit our [GitHub repository](https://github.com/Alpha-Centauri-00/robotframework-imagedetection). We value your feedback and are excited to grow the library together with the community.
 
 Thank you for choosing "RobotFramework-ImageDetection" for your image detection needs. Happy testing and happy detecting!😄
-
-

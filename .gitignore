@@ -1,2 +1,12 @@
 viva
 __pycache__
+.venv
+.vscode
+.claude
+model_*.pt
+captured_photo.jpg
+output.xml
+log.html
+report.html
+atest/Data/
+atest/testing_data/
