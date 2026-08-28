@@ -1,4 +1,6 @@
+import json
 from datetime import datetime
+from pathlib import Path
 
 import torch
 import torch.nn as nn
@@ -97,9 +99,35 @@ class Base_Detect:
             "classes": classes,
             "img_size": IMG_SIZE,
         }
+
+        # annotate.py's --camera mode writes last_roi.json next to training/ and
+        # validation/ (i.e. at the Data root) after a live-capture session. Pick
+        # it up automatically so the crop region a tester calibrated travels
+        # with the model instead of only living in a terminal printout or a
+        # hand-copied .robot variable that's easy to forget to update.
+        roi_file = Path(training_path).parent / "last_roi.json"
+        if roi_file.is_file():
+            try:
+                capture_roi = json.loads(roi_file.read_text())
+                if all(k in capture_roi for k in ("x", "y", "width", "height")):
+                    checkpoint["capture_roi"] = capture_roi
+                    print(f"Embedded capture ROI from {roi_file} into the checkpoint: {capture_roi}")
+            except (json.JSONDecodeError, OSError) as exc:
+                print(f"Could not read {roi_file}, skipping capture_roi ({exc})")
+
         model_path = datetime.now().strftime("model_%Y%d%m%H%M.pt")
         torch.save(checkpoint, model_path)
         return model_path
+
+    def get_capture_roi(self, model_name):
+        """
+        Returns the {"x", "y", "width", "height"} dict embedded in this
+        checkpoint by train_model() (via annotate.py's last_roi.json), or
+        None if this model has no stored ROI - e.g. it was trained before
+        this feature existed, or without ever running annotate.py --camera.
+        """
+        checkpoint = torch.load(model_name, map_location=self.device)
+        return checkpoint.get("capture_roi")
 
     def _predict(self, model_name, photo_path):
         checkpoint = torch.load(model_name, map_location=self.device)

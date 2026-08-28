@@ -4,9 +4,11 @@ __pycache__
 .vscode
 .claude
 model_*.pt
-captured_photo.jpg
+captured_photo*.jpg
 output.xml
 log.html
 report.html
 atest/Data/
 atest/testing_data/
+/Data/
+results
