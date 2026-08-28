@@ -1,6 +1,10 @@
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
+# This workflow builds the package and publishes it to PyPI when a GitHub
+# release is published. Auth is via PyPI Trusted Publishing (OIDC) - no
+# API token/secret to create or leak. That requires a one-time setup on
+# PyPI's project page (https://pypi.org/manage/project/robotframework-imagedetection/settings/publishing/):
+# add a trusted publisher with this repo (Alpha-Centauri-00/robotframework-imagedetection),
+# workflow filename (python-publish.yml), and environment name (pypi) below.
+#
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
@@ -19,11 +23,16 @@ jobs:
   deploy:
 
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # required for PyPI Trusted Publishing (OIDC)
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # full history + tags, required for hatch-vcs to derive the correct version
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
     - name: Install dependencies
@@ -33,7 +42,4 @@ jobs:
     - name: Build package
       run: python -m build
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-      with:
-        user: __token__
-        password: ${{ secrets.__token__ }}
+      uses: pypa/gh-action-pypi-publish@release/v1

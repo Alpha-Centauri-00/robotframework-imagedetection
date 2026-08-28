@@ -24,7 +24,9 @@ pip install robotframework-imagedetection
 
 ### GPU (NVIDIA/CUDA) support
 
-Training and detection automatically run on an NVIDIA GPU if one is available, falling back to CPU otherwise — no code or keyword changes needed. This library uses PyTorch, so to get GPU acceleration you need to install a CUDA-enabled PyTorch build instead of the default CPU-only one from PyPI. Follow the selector at [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) to get the exact command for your CUDA version — with `uv`:
+Training and detection automatically run on an NVIDIA GPU if one is available, falling back to CPU otherwise — no code or keyword changes needed. GPU acceleration is optional, not required: both training and detection work correctly on CPU too. The difference is speed, and it depends on what you're doing — training on CPU for anything beyond a tiny dataset will be noticeably slower, while running detection (`Detect From Path`, `Detect From Webcam`) on CPU with an already-trained model is generally fine for most single-photo use cases. A model can also be trained on one machine and deployed to run detection on a different, CPU-only machine — see [CLAUDE.md](CLAUDE.md) for details on that workflow.
+
+This library uses PyTorch, so to get GPU acceleration you need to install a CUDA-enabled PyTorch build instead of the default CPU-only one from PyPI. Follow the selector at [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) to get the exact command for your CUDA version — with `uv`:
 
 ```bash
 uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130

@@ -21,12 +21,12 @@ classifiers = [
     "Framework :: Robot Framework",
 ]
 dependencies = [
-    "numpy",
-    "opencv-python",
-    "Pillow",
+    "numpy>=2.2",
+    "opencv-python>=5.0",
+    "Pillow>=12.0",
     "torch>=2.9",
     "torchvision>=0.24",
-    "robotframework",
+    "robotframework>=7.4",
 ]
 
 [project.urls]
