@@ -68,6 +68,24 @@ Your data structure should look like this:
 
 Following this organized structure will enable smooth data loading and training using the "RobotFramework-ImageDetection" library. Remember to provide a sufficient amount of diverse and representative photos for accurate model training.
 
+### Building your dataset easily with `annotate.py`
+
+Manually cropping photos in an external editor and sorting the results into the right folders by hand is tedious and error-prone. The library ships an interactive annotation helper for exactly this: it shows you a photo (or a live camera feed), you drag a box around just the part you want the model to learn, and it saves that crop straight into the correct `training/<class>/` or `validation/<class>/` folder for you — no manual file management, no coordinate math.
+
+```bash
+# Annotate photos you've already taken:
+python -m Imagedetection.annotate --input-dir path/to/photos --class Celsius --out Data
+
+# Or annotate live from a webcam:
+python -m Imagedetection.annotate --camera 0 --class Celsius --out Data
+```
+
+Each saved crop is automatically split between `training/` and `validation/` (80/20 by default, `--val-ratio` to change it) so you never accidentally put the same photo in both — which would make your validation accuracy meaningless, since the model would just be "tested" on something it already memorized. Run it once per class, dragging a box around that class's subject each time, and your `Data/` folder ends up correctly organized without any manual sorting.
+
+A magnifier follows your cursor while you draw (switching to show the whole box plus margin once you've started one), so precise placement is possible even for small subjects. Full shortcut list and options: `python -m Imagedetection.annotate --help`.
+
+If you're capturing live via `--camera`, the crop region you draw is also saved and automatically embedded into the model file the next time you run `Train Model` — see "Detecting from a live camera" below for why that matters.
+
 ## Train and Detect
 
 ### Training a new model
@@ -128,6 +146,23 @@ Check the test photo
 `${model_name}`: Specifies the path to the generated model file (model_XXXXX.pt) that was trained using the specified training and validation data directories.
 This test case "Check the test photo" calls the "Detect From Path" keyword to perform image detection on a single test photo using the trained model specified.
 
+### Detecting from a live camera
+
+For hardware-in-the-loop testing (e.g. reading a symbol off a physical device's screen via USB camera), use `Detect From Webcam` instead of `Detect From Path`. It captures a frame from a camera, crops it down to just the region you care about, and classifies that crop — the rest of the frame is ignored entirely, since this library is a whole-image classifier, not an object detector, and has no way to locate a subject within a larger scene on its own.
+
+```robot
+*** Test Cases ***
+Check The Live Reading
+    ${prediction}    Detect From Webcam    ${model_name}
+    Log    Detected: ${prediction}
+```
+
+The crop region (`x`, `y`, `width`, `height`) doesn't need to be passed explicitly — if you built your dataset with `annotate.py --camera` (see above), the region you drew is already embedded in the trained model file, and `Detect From Webcam` reads it from there automatically. Pass any of the four arguments explicitly to override that stored region, e.g. while calibrating a new one. If your machine has more than one camera, pass `camera_index` to pick which one OpenCV should open.
+
+`Capture And Predict` is the more general keyword `Detect From Webcam` is built on, for cases where you want to control the saved photo's path directly.
+
+`Get Device Info` is a small diagnostic keyword worth running first in any suite — it logs (and returns) whether training/detection will run on `cuda` or `cpu`, plus PyTorch/CUDA version info, so a misconfigured GPU install shows up immediately instead of just being slower without explanation.
+
 ## Conclusion
 
 Congratulations! You've reached the end of the README for the "RobotFramework-ImageDetection" library. We hope this documentation has provided you with a clear understanding of how to use our library for image detection in your Robot Framework projects.
@@ -135,9 +170,10 @@ Congratulations! You've reached the end of the README for the "RobotFramework-Im
 In this README, we covered the following topics:
 
 - Introduction to the library and its features
-- How to collect and organize your dataset
+- How to collect and organize your dataset, including the `annotate.py` helper for building it without manual cropping/sorting
 - Training a new model and generating the `model_<timestamp>.pt` file
 - Using the trained model for image detection with `Detect From Path`
+- Detecting from a live camera with `Detect From Webcam`, and the diagnostic `Get Device Info` keyword
 
 Our library aims to simplify image detection tasks and empower you to build robust and accurate image detection systems within the Robot Framework.
 

@@ -1,7 +1,14 @@
-# This workflow builds the package and publishes it to PyPI when a GitHub
-# release is published. Auth is via PyPI Trusted Publishing (OIDC) - no
-# API token/secret to create or leak. That requires a one-time setup on
-# PyPI's project page (https://pypi.org/manage/project/robotframework-imagedetection/settings/publishing/):
+# This workflow builds the package and publishes it to PyPI whenever a
+# version tag (e.g. 1.0.1) is pushed - not tied to creating a GitHub Release
+# through the web UI, which can be flaky/inconsistent about recognizing an
+# already-pushed tag. Tag first with git, then (optionally, whenever
+# convenient) write up a GitHub Release with notes for that same tag - the
+# two are decoupled now, so a Release's only purpose is human-readable
+# changelog, not triggering anything.
+#
+# Auth is via PyPI Trusted Publishing (OIDC) - no API token/secret to create
+# or leak. That requires a one-time setup on PyPI's project page
+# (https://pypi.org/manage/project/robotframework-imagedetection/settings/publishing/):
 # add a trusted publisher with this repo (Alpha-Centauri-00/robotframework-imagedetection),
 # workflow filename (python-publish.yml), and environment name (pypi) below.
 #
@@ -13,8 +20,9 @@
 name: Upload Python Package
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*.*.*'
 
 permissions:
   contents: read
